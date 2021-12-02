@@ -1,0 +1,265 @@
+import random
+import time
+
+#Create a class
+class Tank:
+    def __init__(self, name, health, armor, attack, evasion):
+        self.name = name
+        self.health = health
+        self.armor = armor
+        self.attack = attack
+        self.evasion = evasion
+
+#Defining the character classes
+lightTank = Tank('Light Tank', 100, 20, 50, 0.5)
+mediumTank = Tank('Medium Tank', 120, 50, 80, 0.2)
+heavyTank = Tank('Heavy Tank', 100, 80, 80, 0)
+destroyerTank = Tank('Destroyer', 50, 50, 100, 0.25)
+
+print(lightTank.name, '\nHealth: ', lightTank.health, '\nArmor: ', lightTank.armor, '\nAttack: ', lightTank.attack, '\nEvasion: ', lightTank.evasion)
+print("======")
+print(mediumTank.name, '\nHealth: ', mediumTank.health, '\nArmor: ', mediumTank.armor, '\nAttack: ', mediumTank.attack, '\nEvasion: ', mediumTank.evasion)
+print("======")
+print(heavyTank.name, '\nHealth: ', heavyTank.health, '\nArmor: ', heavyTank.armor, '\nAttack: ', heavyTank.attack, '\nEvasion: ', heavyTank.evasion)
+print("======")
+print(destroyerTank.name, '\nHealth: ', destroyerTank.health, '\nArmor: ', destroyerTank.armor, '\nAttack: ', destroyerTank.attack, '\nEvasion: ', destroyerTank.evasion)
+player_tank = input('Choose your tank: ')
+
+#Selecting a tank code
+if player_tank == 'Light Tank':
+    player_tank = lightTank
+elif player_tank == 'Medium Tank':
+    player_tank = mediumTank
+elif player_tank == 'Heavy Tank':
+    player_tank = heavyTank
+elif player_tank == 'Destroyer Tank':
+    player_tank = destroyerTank
+print('You choose', player_tank.name)
+player_tank_initial_armor = player_tank.armor
+
+computer_tank_list = random.choice(['l','m','h','d'])
+if computer_tank_list == 'l':
+    computer_tank = lightTank
+    print('Computer choose', computer_tank.name)
+elif computer_tank_list == 'm':
+    computer_tank = mediumTank
+    print('Computer choose', computer_tank.name)
+elif computer_tank_list == 'h':
+    computer_tank = heavyTank
+    print('Computer choose', computer_tank.name)
+elif computer_tank_list == 'd':
+    computer_tank = destroyerTank
+    print('Computer choose', computer_tank.name)
+computer_tank_initial_armor = computer_tank.armor
+
+#Back Data 
+while computer_tank.health > 0 and player_tank.health > 0:
+    
+    time.sleep(3)
+    print()
+    print()
+    print("=============================")
+    print('Computer')
+    print('Health: ',computer_tank.health)
+    print('Armor: ',computer_tank.armor)
+
+    print('Player')
+    print('Health: ',player_tank.health)
+    print('Armor: ',player_tank.armor)
+
+    print()
+    print()
+    print('A - Attack')
+    print('R - Repair')
+    print('D - Defend')
+    player_move = input('Choose: ')
+    computer_move = 'A'
+    print("=============================")
+    print()
+    print()
+
+    #Player's Move
+
+    #Attack
+    if player_move == 'A':
+        print('You choose attack')
+        if computer_move == 'D':
+            if computer_tank.evasion == 0.5:
+                defend = random.randint(1,3)
+            elif computer_tank.evasion == 0.2:
+                defend = random.randint(1,6)
+            elif computer_tank.evasion == 0.25:
+                defend = random.randint(1,5)
+            elif computer_tank.evasion == 0:
+                defend = random.randint(1,2)
+        else:
+            if computer_tank.evasion == 0.5:
+                defend = random.randint(1,2)
+            elif computer_tank.evasion == 0.2:
+                defend = random.randint(1,5)
+            elif computer_tank.evasion == 0.25:
+                defend = random.randint(1,4)
+            elif computer_tank.evasion == 0:
+                defend = 1
+
+        time.sleep(3)
+
+        # attacking data (checks the health, armour, etc.)
+        if defend == 1:
+            if computer_tank.armor<=0:
+                computer_tank.health = computer_tank.health - player_tank.attack
+                if computer_tank.health < 0:
+                    computer_tank.health = 0
+                print('Player attack: ', player_tank.attack)
+                print("Player's Health", player_tank.health)
+                print("Player's Armor", player_tank.armor)
+                print("==============")
+                print("Computer's Health", computer_tank.health)
+                print("Computer's Armor", computer_tank.armor)
+            else:
+                computer_tank.armor = computer_tank.armor - player_tank.attack
+                if computer_tank.armor < 0:
+                    computer_tank.health = computer_tank.health + computer_tank.armor
+                    computer_tank.armor = 0
+                if computer_tank.health < 0:
+                    computer_tank.health = 0
+                print('Player attack: ', player_tank.attack)
+                print("Player's Health", player_tank.health)
+                print("Player's Armor", player_tank.armor)
+                print("==============")
+                print("Computer's Health", computer_tank.health)
+                print("Computer's Armor", computer_tank.armor)
+        else:
+            print('Computer dodge your attack')
+            
+    #Repair
+    elif player_move == 'R':
+        print('You choose repair')
+        if player_tank.armor < player_tank_initial_armor:
+            player_tank.armor = player_tank.armor + 10
+            if player_tank.armor > player_tank_initial_armor:
+                player_tank.armor = player_tank_initial_armor
+        time.sleep(3)
+        print('Player')
+        print('Health: ',player_tank.health)
+        print('Armor: ',player_tank.armor)
+
+    #Defend
+    elif player_move == 'D':
+        print('You choose defend')
+
+    print()
+    print("======")
+    print()
+        
+
+    #Computer's Move
+    
+    #computer_move = random.choice(['A','R','D'])
+    if computer_move == 'A':
+        print('Computer choose attack')
+        if player_move == 'D':
+            if player_tank.evasion == 0.5:
+                defend = random.randint(1,3)
+            elif player_tank.evasion == 0.2:
+                defend = random.randint(1,6)
+            elif player_tank.evasion == 0.25:
+                defend = random.randint(1,5)
+            elif player_tank.evasion == 0:
+                defend = random.randint(1,2)
+        else:
+            if player_tank.evasion == 0.5:
+                defend = random.randint(1,2)
+            elif player_tank.evasion == 0.2:
+                defend = random.randint(1,5)
+            elif player_tank.evasion == 0.25:
+                defend = random.randint(1,4)
+            elif player_tank.evasion == 0:
+                defend = 1
+
+        time.sleep(3)
+
+        if defend == 1:
+            if player_tank.armor<=0:
+                player_tank.health = player_tank.health - computer_tank.attack
+                if player_tank.health < 0:
+                    player_tank.health = 0
+                print('Computer attack: ', computer_tank.attack)
+                print("Computer's Health", computer_tank.health)
+                print("Computer's Armor", computer_tank.armor)
+                print("==============")
+                print("Player's Health", player_tank.health)
+                print("Player's Armor", player_tank.armor)
+            else:
+                player_tank.armor = player_tank.armor - computer_tank.attack
+                if player_tank.armor < 0:
+                    player_tank.health = player_tank.health + player_tank.armor
+                    player_tank.armor = 0
+                if player_tank.health < 0:
+                    player_tank.health = 0
+                print('Computer attack: ', computer_tank.attack)
+                print("Computer's Health", computer_tank.health)
+                print("Computer's Armor", computer_tank.armor)
+                print("==============")
+                print("Player's Health", player_tank.health)
+                print("Player's Armor", player_tank.armor)
+        else:
+            print('Player dodge the attack')
+
+    #Repair
+    elif computer_move == 'R':
+        print('Computer choose repair')
+        if computer_tank.armor < computer_tank_initial_armor:
+            computer_tank.armor = computer_tank.armor + 10
+            if computer_tank.armor > computer_tank_initial_armor:
+                computer_tank.armor = computer_tank_initial_armor
+        
+        time.sleep(3)
+
+        print('Computer')
+        print('Health: ',computer_tank.health)
+        print('Armor: ',computer_tank.armor)
+
+    #Defend
+    elif computer_move == 'D':
+        print('Computer choose defend')
+
+#Winning outcomes
+time.sleep(3)
+
+if computer_tank.health <= 0:
+    computer_tank.health = 0
+    print()
+    print()
+    print("=============================")
+    print('Computer')
+    print('Health: ',computer_tank.health)
+    print('Armor: ',computer_tank.armor)
+    print('======')
+    print('Player')
+    print('Health: ',player_tank.health)
+    print('Armor: ',player_tank.armor)
+    print('Player WINS!')
+elif computer_tank.health <= 0 and player_tank.health <= 0:
+    player_tank.health = 0
+    computer_tank.health = 0
+    print("=============================")
+    print('Computer')
+    print('Health: ',computer_tank.health)
+    print('Armor: ',computer_tank.armor)
+
+    print('Player')
+    print('Health: ',player_tank.health)
+    print('Armor: ',player_tank.armor)
+    print('Computer WINS!')
+else:
+    player_tank.health = 0
+    print("=============================")
+    print('Computer')
+    print('Health: ',computer_tank.health)
+    print('Armor: ',computer_tank.armor)
+
+    print('Player')
+    print('Health: ',player_tank.health)
+    print('Armor: ',player_tank.armor)
+    print('Computer WINS!')
